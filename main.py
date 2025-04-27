@@ -4,11 +4,6 @@ if __name__ == '__main__':
     from tqdm import tqdm
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    # image_dir = '/tmp/pycharm_project_456/data/stanford_cars/cars_train/'
-    # train_dataset = CustomCarsDataset(image_dir = image_dir, transform = transform)
-    #
-    # launcher = trainer(train_dataset,"model_epoch_150")
     print("[INFO] Initialization completed.")
 
     # model, loss = launcher.train(is_train = True, resume = True)
@@ -33,9 +28,9 @@ if __name__ == '__main__':
     evaluator = sampler(model)
     shape = (1, 3, 64, 64)
     xt = torch.randn(shape, device = device)
+    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_06_eta0', eta = 0.0, xt = xt)
     evaluator.visualize_ddim_process(750, 250, shape, 'ddim_06_eta0.01', eta = 0.01, xt = xt)
-    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_05_eta0.03', eta = 0.03, xt = xt)
-    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_05_eta0.1', eta = 0.1, xt = xt)
-    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_05_eta0.3', eta = 0.3, xt = xt)
-    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_05_eta0.5', eta = 0.5, xt = xt)
-    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_05_eta1', eta = 1.0, xt = xt)
+    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_06_eta0.03', eta = 0.03, xt = xt)
+    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_06_eta0.05', eta = 0.05, xt = xt)
+    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_06_eta0.1', eta = 0.1, xt = xt)
+    evaluator.visualize_ddim_process(750, 250, shape, 'ddim_06_eta0.3', eta = 0.3, xt = xt)

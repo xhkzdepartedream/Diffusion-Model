@@ -5,7 +5,7 @@ import numpy as np
 from torchvision import transforms
 
 from .Unet import *
-from .ddpm import DenoiseDiffusion
+from .denoisediffusion import DenoiseDiffusion
 from .utils import *
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'

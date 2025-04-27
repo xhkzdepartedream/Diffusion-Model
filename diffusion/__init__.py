@@ -1,4 +1,4 @@
-from .ddpm import *
+from .denoisediffusion import *
 from .init_dataset import *
 from .utils import *
 from .Unet import *

@@ -1,5 +1,5 @@
 from .Unet import *
-from .ddpm import DenoiseDiffusion
+from .denoisediffusion import DenoiseDiffusion
 from .utils import *
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
