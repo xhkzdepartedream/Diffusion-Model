@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE / Editor
+.idea/
+.vscode/
+
+# Cache
+.ruff_cache/
+
+# Data
+*.lmdb/
+data/
+
+# Checkpoints and models
+*.pth
+*.ckpt
+checkpoints/
+
+# Output
+visuals_dm/
+visuals_ldm/
+output/
+
+# Logs and temporary files
+done.txt
+latent_stats.pth
