@@ -1,7 +1,8 @@
+import math
 from typing import Union, List, Tuple, Optional
+
 import torch
 import torch.nn as nn
-import math
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -45,7 +46,9 @@ class ResidualBlock(nn.Module):
 
     def forward(self, input: torch.Tensor, t: torch.Tensor):
         output = self.conv1(self.act1(self.norm1(input)))
-        output += self.time_emb(self.act2(t))[:, :, None, None]
+        tmp = self.time_emb(self.act2(t))[:, :, None, None]
+        output += tmp
+
         output = self.conv2(self.act3(self.norm2(output)))
         output += self.shortcut(input)
         return output
@@ -69,9 +72,10 @@ class AttentionBlock(nn.Module):
         input = input.reshape(batch_size, n_ch, -1).permute(0, 2, 1)  # shape: [batch_size, index(h*w), n_channels]
         qkv = self.w_qkv(input).reshape(batch_size, -1, self.n_heads, self.d_k * 3)  # n_channels = d_k * n_heads
         q, k, v = torch.chunk(qkv, 3, dim = -1)  # shape: [batch_size, index, n_heads, d_k]
-        attn = torch.einsum('bihd,bjhd->bijh', q, k) / self.scale
+        q_k_product = torch.matmul(q, k.transpose(-2, -1))
+        attn = q_k_product / self.scale
         attn = attn.softmax(dim = 2)
-        res = torch.einsum('bijh,bjhd->bihd', attn, v)
+        res = torch.matmul(attn, v)
         res = res.reshape(batch_size, -1, self.n_heads * self.d_k)
         res = self.dense(res) + input
         res = res.permute(0, 2, 1).reshape(batch_size, n_ch, height, width)
@@ -163,7 +167,7 @@ class Unet(nn.Module):
                 down.append(DownBlock(in_ch, out_ch, n_ch * 4, is_attn[i]))
                 in_ch = out_ch
 
-            if (i < n - 1):
+            if i < n - 1:
                 down.append(DownSample(out_ch))
         self.down = nn.ModuleList(down)
 
